@@ -11,23 +11,24 @@ public class Libro {
 
     @Column(unique = true)
     private String titulo;
-    private String autor;
+
+    @ManyToOne
+    @JoinColumn(name = "autor_id")
+    private Autor autor;
+
     private String idioma;
     private Double numeroDescargas;
 
-
     public Libro() {}
 
-
-    public Libro(String titulo, String autor, String idioma, Double numeroDescargas) {
-        this.titulo = titulo;
+    public Libro(DatosLibro datosLibro, Autor autor) {
+        this.titulo = datosLibro.titulo();
+        this.idioma = datosLibro.idiomas().isEmpty() ? "Desconocido" : datosLibro.idiomas().get(0);
+        this.numeroDescargas = datosLibro.descargas();
         this.autor = autor;
-        this.idioma = idioma;
-        this.numeroDescargas = numeroDescargas;
     }
 
-
-
+    // Getters y Setters
     public Long getId() {
         return id;
     }
@@ -44,11 +45,11 @@ public class Libro {
         this.titulo = titulo;
     }
 
-    public String getAutor() {
+    public Autor getAutor() {
         return autor;
     }
 
-    public void setAutor(String autor) {
+    public void setAutor(Autor autor) {
         this.autor = autor;
     }
 
@@ -66,5 +67,15 @@ public class Libro {
 
     public void setNumeroDescargas(Double numeroDescargas) {
         this.numeroDescargas = numeroDescargas;
+    }
+
+    @Override
+    public String toString() {
+        return "----------- LIBRO -----------\n" +
+                "Título: " + titulo + "\n" +
+                "Autor: " + (autor != null ? autor.getNombre() : "Desconocido") + "\n" +
+                "Idioma: " + idioma + "\n" +
+                "Descargas: " + numeroDescargas + "\n" +
+                "-----------------------------\n";
     }
 }
